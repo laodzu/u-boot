@@ -273,8 +273,39 @@ unsigned int cm_get_qspi_controller_clk_hz(void);
 #define CONFIG_SYS_CONSOLE_IS_IN_ENV
 #define CONFIG_SYS_CONSOLE_OVERWRITE_ROUTINE
 #define CONFIG_SYS_CONSOLE_ENV_OVERWRITE
-#define CONFIG_ENV_IS_NOWHERE
 #define CONFIG_ENV_SIZE			4096
+#define CONFIG_PRELOADER_BOOT_FROM_SDMMC 1
+#if (CONFIG_PRELOADER_BOOT_FROM_SDMMC == 1)
+/* Store envirnoment in MMC card */
+#define CONFIG_ENV_IS_IN_MMC
+#elif (CONFIG_PRELOADER_BOOT_FROM_NAND == 1)
+/* Store envirnoment in NAND flash */
+#define CONFIG_ENV_IS_IN_NAND
+#else
+/* Store envirnoment in SPI flash */
+#define CONFIG_ENV_IS_IN_SPI_FLASH
+#endif
+
+/* environment setting for SPI flash */
+#ifdef CONFIG_ENV_IS_IN_SPI_FLASH
+#define CONFIG_ENV_OFFSET               (0x00040000)
+#define CONFIG_ENV_SECT_SIZE            (64 * 1024)
+#define CONFIG_ENV_SPI_BUS              0
+#define CONFIG_ENV_SPI_CS               0
+#define CONFIG_ENV_SPI_MODE             SPI_MODE_3
+#define CONFIG_ENV_SPI_MAX_HZ           CONFIG_SF_DEFAULT_SPEED
+#endif
+
+/* environment setting for MMC */
+#ifdef CONFIG_ENV_IS_IN_MMC
+#define CONFIG_SYS_MMC_ENV_DEV          0       /* device 0 */
+#define CONFIG_ENV_OFFSET               512     /* just after the MBR */
+#endif
+
+/* environment setting for NAND */
+#ifdef CONFIG_ENV_IS_IN_NAND
+#define CONFIG_ENV_OFFSET               (0x00080000)
+#endif
 
 /*
  * SPL
