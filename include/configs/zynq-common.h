@@ -172,6 +172,7 @@
 /* Allow to overwrite serial and ethaddr */
 #define CONFIG_ENV_OVERWRITE
 
+#if 0
 /* Environment */
 #ifndef CONFIG_ENV_IS_NOWHERE
 # ifndef CONFIG_SYS_NO_FLASH
@@ -193,6 +194,12 @@
 # ifndef CONFIG_ENV_OFFSET
 #  define CONFIG_ENV_OFFSET		0xE0000
 # endif
+#endif
+
+#else
+#define CONFIG_ENV_IS_IN_MMC
+#define CONFIG_SYS_MMC_ENV_DEV          0       /* device 0 */
+#define CONFIG_ENV_OFFSET               512     /* just after the MBR */
 #endif
 
 /* enable preboot to be loaded before CONFIG_BOOTDELAY */
